@@ -10,14 +10,6 @@ res: resb 80
 section .text
 global _start
 _start:
-mov eax,msgx
-call sprint
-mov ecx,x
-mov edx, 80
-call sread
-mov eax,x
-call atoi
-mov [x], eax
 
 mov eax,msga
 call sprint
@@ -27,34 +19,32 @@ mov edx, 80
 call sread
 mov eax,a
 call atoi
-mov [a],eax
+cmp eax,8
+jl _add_8
+jmp _mul_a_x
 
-mov ecx,[a]
-cmp ecx, 8
-je _men
-jne _bol
+_add_8:
+mov eax,msgx
+call sprint
 
-_men:
-mov eax,[a]
-mov ebx,8
-add eax,ebx
-mov [res],eax
-jmp _fin
+mov ecx,x
+mov edx, 80
+call sread
+mov eax,x
+call atoi
 
-_bol:
-mov eax, [a]
-mov ebx,x
-imul eax,ebx
-mov [res],eax
-jmp _fin
+add eax, 8
+jmp _end
 
-_fin:
+_mul_a_x:
+mov edx, a
+mov eax, x
+mul edx
+
+_end:
+mov ecx, eax
 mov eax, msgf
 call sprint
-mov eax, [res]
+mov eax, ecx
 call iprintLF
 call quit
-
-
-
-
